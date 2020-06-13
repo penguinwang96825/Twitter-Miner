@@ -162,6 +162,7 @@ class TwitterClient():
     
 class TweetAnalyzer():
     """
+    An analyzer to tweets.
     """
     def tweets_to_dataframe(self, tweets):
         df = pd.DataFrame()
@@ -174,22 +175,31 @@ class TweetAnalyzer():
         df["date"] = np.array([tweet.created_at for tweet in tweets])
         df["source"] = np.array([tweet.source for tweet in tweets])
         return df
-        
-if __name__ == "__main__":
-#     stream = MaxStreamer(tweets_filename="tweets.json")
-#     stream.start("python")
-#     twitter_client = TwitterClient(twitter_user="YassineAlouini")
-#     print(twitter_client.get_friend_list(1))
-    tweet_analyzer = TweetAnalyzer()
-    api = TwitterClient().get_twitter_client_api()
-    tweets = api.user_timeline(screen_name="SheffieldNLP", count=10)
-    df = tweet_analyzer.tweets_to_dataframe(tweets)
+```
+
+### Evaluate
+```python
+# Analyse tweet
+tweet_analyzer = TweetAnalyzer()
+api = TwitterClient().get_twitter_client_api()
+tweets = api.user_timeline(screen_name="carneyms", count=100)
+df = tweet_analyzer.tweets_to_dataframe(tweets)
 ```
 
 ### Visualisation
 ```python
-plt.figure(figsize=(10, 4))
-sns.heatmap(tweet_df.isnull(), cbar=True, cmap=sns.color_palette("GnBu_d"))
-plt.title("Missing Values Heatmap")
+plt.style.use("seaborn")
+plt.figure(figsize=(16, 8))
+plt.subplot(2, 1, 1)
+ax = sns.scatterplot(x="date", y="favorite_count", color="darkblue", data=df)
+sns.lineplot(x="date", y="favorite_count", color="steelblue", data=df)
+ax.set_xlim(df['date'].min(), df['date'].max())
+plt.title("Favorite Counts through Date")
+plt.subplot(2, 1, 2)
+sns.distplot(df["tweet_length"], color="steelblue", kde_kws={'bw': 0.5})
+plt.title("Tweet Length Kernel Dense Plot")
+plt.tight_layout()
 plt.show()
 ```
+
+![Mark Carney (UK): carneyms](https://github.com/penguinwang96825/Twitter_Miner/blob/master/image/Mark%20Carney.png?raw=true)
