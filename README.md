@@ -4,7 +4,9 @@ Crawl tweets with tweepy.
 ## Import Packages
 ```python
 import re
+import json
 import time
+import pymongo
 import multiprocessing
 import tweepy
 import pandas as pd
@@ -43,21 +45,31 @@ class MaxListener(tweepy.StreamListener):
     def on_connect(self):
         print("You are now connected to the streaming API.")
     
-    def on_data(self, raw_data):
+    def on_data(self, data):
         if (time.time() - self.start_time) < self.limit:
-            self.process_data(raw_data)
+            self.process_data(data)
             return True
         else:
             return False
     
-    def process_data(self, raw_data):
+    def process_data(self, data):
         try:
-            print(raw_data)
+            # print(data)
             with open(self.tweets_filename, 'a') as f:
-                f.write(raw_data)
+                f.write(data)
+            
+            # Store raw_data into mongodb
+            client = pymongo.MongoClient(MONGO_CLIENT)
+            db = client.twitterdb
+            datajson = json.loads(data)
+            # Insert the data into the mongodb into a collection called twitter_search
+            # If twitter_search doesn't exist, it will be created.
+            db.twitter_search.insert_one(datajson)
             return True
+        
         except BaseException as e:
             print("Error on data: {}".format(e))
+            
         return True 
         
     def on_error(self, status_code):
@@ -69,7 +81,7 @@ class TwitterClient():
     Get my own tweets or others.
     
     Parameters:
-        twitter_user: if twitter_user is set to None, it means capture my tweets. Instead, crawl twitter_user tweets.
+        twitter_user: if twitter_user is set to None, it means capture my tweets. Instead, crawl twitter_user tweets. 
     """
     def __init__(self, twitter_user=None):
         self.auth = TwitterAuth().auth_twitter_app()
@@ -102,7 +114,7 @@ class TwitterClient():
 ```python
 class MaxStreamer():
     """
-    An instance of tweepy.Stream establishes a streaming session and routes messages to StreamListener instance.
+    In Tweepy, an instance of tweepy.Stream establishes a streaming session and routes messages to StreamListener instance.
     This MaxStreamer() class could parse tweets in a time interval.
     Next, it would save the tweets into a json file.
     
@@ -150,9 +162,16 @@ class TwitterSearch():
                     break
                 searched_tweets.extend(new_tweets)
                 self.last_id = new_tweets[-1].id
+                
             except tweepy.TweepError as e:
                 print(e)
                 break
+        client = pymongo.MongoClient(MONGO_CLIENT)
+        db = client.twitterdb
+        for i in tqdm(range(max_tweets)):
+            # Insert the data into the mongodb into a collection called twitter_search
+            # If twitter_search doesn't exist, it will be created.
+            db.twitter_search.insert_one(searched_tweets[i]._json)
         return searched_tweets
     
 class TweetAnalyzer():
@@ -294,22 +313,12 @@ plt.show()
 
 1. Using `MaxStreamer()`.
 ```python
-streamer = MaxStreamer(tweets_filename="tweets.json", time_limit=10)
-streamer.start(["sheffield"])
-```
-
-```
-You are now connected to the streaming API.
-{"created_at":"Sun Jun 14 16:35:58 +0000 2020","id":1272206153536036864,"id_str":"1272206153536036864","text":"Mayor of Blackburn - MUSLIM\nMayor of Sheffield -MUSLIM\nMayor of Oxford -MUSLIM\nMayor of Luton- MUSLIM\nMayor of Oldh\u2026 https:\/\/t.co\/14UOG6bUN1","source":"\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e","truncated":true,"in_reply_to_status_id":1272206141292867584,"in_reply_to_status_id_str":"1272206141292867584","in_reply_to_user_id":751307176094920704,"in_reply_to_user_id_str":"751307176094920704","in_reply_to_screen_name":"GaurVikash07","user":{"id":751307176094920704,"id_str":"751307176094920704","name":"Dr Vikash Gaur \u2699\ufe0f\ud83d\udea9","screen_name":"GaurVikash07","location":"New Delhi, India","url":null,"description":"RTI Activist\nTraveller, Academician, Author, Son of Farmer, \nNationalism My soul, \nproud a Hindu & Hinduism  #FightAgainstConversion","translator_type":"none","protected":false,"verified":false,"followers_count":1072,"friends_count":1105,"listed_count":3,"favourites_count":127376,"statuses_count":37543,"created_at":"Fri Jul 08 06:49:24 +0000 2016","utc_offset":null,"time_zone":null,"geo_enabled":false,"lang":null,"contributors_enabled":false,"is_translator":false,"profile_background_color":"F5F8FA","profile_background_image_url":"","profile_background_image_url_https":"","profile_background_tile":false,"profile_link_color":"1DA1F2","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1261172049235468288\/ttAir2fK_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1261172049235468288\/ttAir2fK_normal.jpg","profile_banner_url":"https:\/\/pbs.twimg.com\/profile_banners\/751307176094920704\/1575344333","default_profile":true,"default_profile_image":false,"following":null,"follow_request_sent":null,"notifications":null},"geo":null,"coordinates":null,"place":null,"contributors":null,"is_quote_status":false,"extended_tweet":{"full_text":"Mayor of Blackburn - MUSLIM\nMayor of Sheffield -MUSLIM\nMayor of Oxford -MUSLIM\nMayor of Luton- MUSLIM\nMayor of Oldham-MUSLIM\nMayor of Rockdale-MUSLIM\n \nOver 3,000 Muslim Mosques\nOver 130 Muslim Sharia Courts\nOver 50 Muslim Sharia Councils\nMuslims-Only No-Go Areas Across The UK.","display_text_range":[0,278],"entities":{"hashtags":[],"urls":[],"user_mentions":[],"symbols":[]}},"quote_count":0,"reply_count":0,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"urls":[{"url":"https:\/\/t.co\/14UOG6bUN1","expanded_url":"https:\/\/twitter.com\/i\/web\/status\/1272206153536036864","display_url":"twitter.com\/i\/web\/status\/1\u2026","indices":[117,140]}],"user_mentions":[],"symbols":[]},"favorited":false,"retweeted":false,"filter_level":"low","lang":"en","timestamp_ms":"1592152558107"}
+streamer = MaxStreamer(tweets_filename="tweets.json", time_limit=30)
+streamer.start(["Trump", "JeromeHaydenPo2", "carneyms", "IvanWKljunak"])
 ```
 
 2. Using `TwitterSearch()`.
 ```python
 twitter_search = TwitterSearch()
-searched_tweets = twitter_search.get_query(query="sheffield", max_tweets=100)
-len(searched_tweets)
-```
-
-```
-100
+searched_tweets = twitter_search.get_query(query="forex", max_tweets=1000)
 ```
