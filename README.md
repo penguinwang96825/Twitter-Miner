@@ -252,7 +252,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![Mark Carney (UK): carneyms](https://github.com/penguinwang96825/Twitter_Miner/blob/master/image/Mark%20Carney.png?raw=true)
+![visualisation](https://github.com/penguinwang96825/Twitter_Miner/blob/master/image/word%20count%20and%20char%20count.png?raw=true)
 
 ```python
 print("Size of Donald J. Trump dataframe: {}".format(df_DT.shape))
