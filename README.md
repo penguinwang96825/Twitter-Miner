@@ -69,7 +69,7 @@ class TwitterClient():
     Get my own tweets or others.
     
     Parameters:
-        twitter_user: if twitter_user is set to None, it means capture my tweets. Instead, crawl twitter_user tweets. 
+        twitter_user: if twitter_user is set to None, it means capture my tweets. Instead, crawl twitter_user tweets.
     """
     def __init__(self, twitter_user=None):
         self.auth = TwitterAuth().auth_twitter_app()
