@@ -261,7 +261,7 @@ print("Size of Mark Carney dataframe: {}".format(df_UK.shape))
 print("Size of Haruhiko Kuroda dataframe: {}".format(df_JN.shape))
 ```
 
-```console
+```
 Size of Donald J. Trump dataframe: (200, 12)
 Size of Jerome Hayden Powell dataframe: (6, 12)
 Size of Mark Carney dataframe: (44, 12)
@@ -298,7 +298,7 @@ streamer = MaxStreamer(tweets_filename="tweets.json", time_limit=10)
 streamer.start(["sheffield"])
 ```
 
-```console
+```
 You are now connected to the streaming API.
 {"created_at":"Sun Jun 14 16:35:58 +0000 2020","id":1272206153536036864,"id_str":"1272206153536036864","text":"Mayor of Blackburn - MUSLIM\nMayor of Sheffield -MUSLIM\nMayor of Oxford -MUSLIM\nMayor of Luton- MUSLIM\nMayor of Oldh\u2026 https:\/\/t.co\/14UOG6bUN1","source":"\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e","truncated":true,"in_reply_to_status_id":1272206141292867584,"in_reply_to_status_id_str":"1272206141292867584","in_reply_to_user_id":751307176094920704,"in_reply_to_user_id_str":"751307176094920704","in_reply_to_screen_name":"GaurVikash07","user":{"id":751307176094920704,"id_str":"751307176094920704","name":"Dr Vikash Gaur \u2699\ufe0f\ud83d\udea9","screen_name":"GaurVikash07","location":"New Delhi, India","url":null,"description":"RTI Activist\nTraveller, Academician, Author, Son of Farmer, \nNationalism My soul, \nproud a Hindu & Hinduism  #FightAgainstConversion","translator_type":"none","protected":false,"verified":false,"followers_count":1072,"friends_count":1105,"listed_count":3,"favourites_count":127376,"statuses_count":37543,"created_at":"Fri Jul 08 06:49:24 +0000 2016","utc_offset":null,"time_zone":null,"geo_enabled":false,"lang":null,"contributors_enabled":false,"is_translator":false,"profile_background_color":"F5F8FA","profile_background_image_url":"","profile_background_image_url_https":"","profile_background_tile":false,"profile_link_color":"1DA1F2","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1261172049235468288\/ttAir2fK_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1261172049235468288\/ttAir2fK_normal.jpg","profile_banner_url":"https:\/\/pbs.twimg.com\/profile_banners\/751307176094920704\/1575344333","default_profile":true,"default_profile_image":false,"following":null,"follow_request_sent":null,"notifications":null},"geo":null,"coordinates":null,"place":null,"contributors":null,"is_quote_status":false,"extended_tweet":{"full_text":"Mayor of Blackburn - MUSLIM\nMayor of Sheffield -MUSLIM\nMayor of Oxford -MUSLIM\nMayor of Luton- MUSLIM\nMayor of Oldham-MUSLIM\nMayor of Rockdale-MUSLIM\n \nOver 3,000 Muslim Mosques\nOver 130 Muslim Sharia Courts\nOver 50 Muslim Sharia Councils\nMuslims-Only No-Go Areas Across The UK.","display_text_range":[0,278],"entities":{"hashtags":[],"urls":[],"user_mentions":[],"symbols":[]}},"quote_count":0,"reply_count":0,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"urls":[{"url":"https:\/\/t.co\/14UOG6bUN1","expanded_url":"https:\/\/twitter.com\/i\/web\/status\/1272206153536036864","display_url":"twitter.com\/i\/web\/status\/1\u2026","indices":[117,140]}],"user_mentions":[],"symbols":[]},"favorited":false,"retweeted":false,"filter_level":"low","lang":"en","timestamp_ms":"1592152558107"}
 ```
@@ -310,6 +310,6 @@ searched_tweets = twitter_search.get_query(query="sheffield", max_tweets=100)
 len(searched_tweets)
 ```
 
-```console
+```
 100
 ```
