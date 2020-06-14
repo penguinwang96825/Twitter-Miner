@@ -288,7 +288,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![missing values]()
+![missing values](https://github.com/penguinwang96825/Twitter_Miner/blob/master/image/missing%20value.png?raw=true)
 
 ### Evaluate Other Function
 
