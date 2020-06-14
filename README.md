@@ -102,7 +102,7 @@ class TwitterClient():
 ```python
 class MaxStreamer():
     """
-    In Tweepy, an instance of tweepy.Stream establishes a streaming session and routes messages to StreamListener instance.
+    An instance of tweepy.Stream establishes a streaming session and routes messages to StreamListener instance.
     This MaxStreamer() class could parse tweets in a time interval.
     Next, it would save the tweets into a json file.
     
